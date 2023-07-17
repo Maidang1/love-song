@@ -1,43 +1,48 @@
 ---
 import Page from '../layouts/page.astro';
-export function getStaticPaths() {
-  return [
-    {params: {song: 'FallinForYa'}},
-  ];
-}
+import url from "url"
+const { pathname } = url.parse(Astro.request.url, true)
+import musicApi from "NeteaseCloudMusicApi"
+const musicId = pathname.replace('/', '')
 
-const { song } = Astro.params;
-import {data} from "../song-data/lyric"
-const englishVersion = JSON.stringify(data[song].english).split('\\n');
-const chineseVersion = JSON.stringify(data[song].chinese).split('\\n');
+const lyricInfo = await musicApi.lyric_new({id: musicId})
+const { lyric } = lyricInfo.body.lrc as any;
+const { lyric : tlyric } = lyricInfo.body.tlyric as any
+
+
+const originLyric = (lyric as string).replace(/{.*}/, '').split('\n')
 const regex = /^\[(\d{2}:\d{2}\.\d{3})\](.*)$/;
 const result = {}
-englishVersion.forEach((item, index) => {
+originLyric.forEach((item) => {
   const match = item.match(regex)
   if(!match) return
   const [_, time, lyric]= match
+  if(!time || !lyric) return
   result[time] = {
     ...(result[time] || {}),
     englishVersion:lyric
   }
 })
-
-chineseVersion.forEach((item, index) => {
+tlyric.split("\n").forEach((item) => {
   const match = item.match(regex)
   if(!match) return
   const [_, time, lyric]= match
+  if(!time || !lyric) return
   result[time] = {
     ...(result[time] || {}),
     chineseVersion:lyric
   }
 })
-const highLight = data[song].highLight
+
 ---
+
+
 <Page>
-  <div class="max-w-3xl mx-auto px-6 py-8" style="font-size: 1rem; max-width: 48rem;">
+  {
+    Object.keys(result).length === 0 ? <div>没有歌词或纯音乐</div> :<div class="max-w-3xl mx-auto px-6 py-8" style="font-size: 1rem; max-width: 48rem;">
     {
       Object.keys(result).map(time => {
-      return <div class={`py-[0.3em] ${highLight.includes(time) ? 'text-high-light' : ''}`}>
+      return <div class={`py-[0.3em]`}>
         <p>
           {result[time].englishVersion}
         </p>
@@ -46,4 +51,5 @@ const highLight = data[song].highLight
       })
     }
   </div>
+  }
 </Page>

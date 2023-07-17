@@ -12,6 +12,7 @@ export const SongTitle = ({ songTitle }: { songTitle: songTitleType }) => {
         <div className="flex-1">
           {children.map((item) => (
             <a
+              key={item.link}
               href={item.link}
               className="flex items-center gap-2 h-12 border-b border-base last:border-0 hv-base"
             >

@@ -1,7 +1,19 @@
 ---
 import Page from '../layouts/page.astro';
 import { SongTitle } from "../components/song-title";
-import { songTitleData } from '../song-data'
+import musicApi from "NeteaseCloudMusicApi"
+import url from "url"
+
+const  { query } = url.parse(Astro.request.url, true)
+const musicId = query.id as string
+// https://music.163.com/playlist?id=8290320380&userid=3875235062
+
+const playList = await musicApi.playlist_track_all({id: musicId})
+const songsInfo = (playList.body.songs as any[]).map(({name, id})=> ({title:name, link: `/${id}`}))
+const songTitleData  =[{
+	prefix: "F",
+	children: songsInfo
+}]
 ---
 
 
