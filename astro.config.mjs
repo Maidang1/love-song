@@ -3,7 +3,7 @@ import react from "@astrojs/react";
 import tailwind from "@astrojs/tailwind";
 import node from "@astrojs/node";
 
-import netlify from "@astrojs/netlify/functions";
+import netlify from '@astrojs/netlify/edge-functions'
 
 // https://astro.build/config
 export default defineConfig({
