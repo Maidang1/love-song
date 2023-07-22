@@ -25,6 +25,7 @@
     "@solidjs/router": "^0.8.2",
     "astro": "^2.7.1",
     "axios": "^1.4.0",
+    "express": "^4.18.2",
     "solid-js": "^1.7.7",
     "solid-start": "^0.3.0-alpha.7"
   },
