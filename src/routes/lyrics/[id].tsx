@@ -58,7 +58,6 @@ export default () => {
       <For each={lyrics}>
         {
           (item) => {
-            console.log(item, item.originLyrics, item.transformedLyrics)
             return (
               <div class="py-[0.3em]">
                 <p>
