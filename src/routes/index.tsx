@@ -15,7 +15,7 @@ export default function Home() {
   })
 
   const playList = createMemo(()=>{
-    return [{prefix:"*", children: songs.map(item => ({title: item.name, id: item.id, link:`/${item.id}`}))}]
+    return [{prefix:"*", children: songs.map(item => ({title: item.name, id: item.id, link:`/lyrics/${item.id}`}))}]
   },[songs])
   return (
     <div class="main-body">
